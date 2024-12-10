@@ -1,6 +1,6 @@
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 [System.Serializable]
 public class Question
@@ -12,7 +12,7 @@ public class Question
 }
 
 [CreateAssetMenu(fileName = "New Category", menuName = "Quiz/Question Data")]
-public class QuestionData: ScriptableObject
+public class QuestionData : ScriptableObject
 {
     public string category;
     public Question[] questions;

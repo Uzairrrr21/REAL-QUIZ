@@ -2,7 +2,7 @@ using UnityEngine;
 using TMPro; // Import the TextMeshPro namespace
 using UnityEngine.UI;
 
-public class GameManager: MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     // Array to hold all categories (each category is a different QuestionData Scriptable Object)
     public QuestionData[] categories;

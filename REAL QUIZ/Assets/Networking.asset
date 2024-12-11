@@ -20,7 +20,7 @@ MonoBehaviour:
     - HTTP
     - FTP
     - TCP
-    correctReplyIndex: 1
+    correctReplyIndex: 0
     questionImage: {fileID: 8659214766596217130, guid: 6b6e607f887ea0546add77d3ce043a7c, type: 3}
   - questionText: Which class is used in our homes?
     replies:
@@ -28,7 +28,7 @@ MonoBehaviour:
     - CLASS B
     - CLASS C
     - CLASS D
-    correctReplyIndex: 3
+    correctReplyIndex: 2
     questionImage: {fileID: -1301741704097522581, guid: e2ac92ae979b1264889e3cb64a5be2d8, type: 3}
   - questionText: ' What do we use for wireless connectivity?'
     replies:
@@ -36,5 +36,5 @@ MonoBehaviour:
     - WAN
     - WLAN
     - MAN
-    correctReplyIndex: 3
+    correctReplyIndex: 2
     questionImage: {fileID: -6000011926379782473, guid: 052dfce45a4ac1843b8af006ea068155, type: 3}

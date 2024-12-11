@@ -18,6 +18,10 @@ public class GameManager : MonoBehaviour
     public Image questionImage;
     public Button [] replyButtons;
 
+    [Header("Score")]
+    public ScoreManager score;
+    public int correctReply = 10;
+    public int wrongReply = 5;
     void Start ()
     {
         SelectCategory(0);
@@ -39,11 +43,21 @@ public class GameManager : MonoBehaviour
     // Method to display the current question 
     public void DisplayQuestion()
     {
-    // Check if a category has been selected 
+        // Check if a category has been selected 
         if (selectedCategory == null) return;
 
         // Get the current question from the selected category 
         var question = selectedCategory.questions[currentQuestionIndex];
+        // Set the question image in the UI (if any)
+        if (question.questionImage != null)
+        {
+            questionImage.sprite = question.questionImage;
+            questionImage.gameObject.SetActive(true);
+        }
+        else
+        {
+            questionImage.gameObject.SetActive(false);
+        }
 
         // Set the question text in the UI 
         questionText.text = question.questionText;
@@ -52,11 +66,11 @@ public class GameManager : MonoBehaviour
         questionImage.sprite = question.questionImage;
 
         // Loop through all reply buttons and set their text to the corresponding replies
-        for (int i=0; i < replyButtons.Length; i++)
+        for (int i = 0; i < replyButtons.Length; i++)
         {
-        // Use TextMeshPro component for reply buttons
             TMP_Text buttonText = replyButtons[i].GetComponentInChildren<TMP_Text>();
-            buttonText.text = question.replies[i];
+            buttonText.text = i < question.replies.Length ? question.replies[i] : "";
+            replyButtons[i].gameObject.SetActive(i < question.replies.Length); // Disable extra buttons
         }
     }
 
@@ -67,15 +81,18 @@ public class GameManager : MonoBehaviour
         // Check if the selected reply is correct
         if (replyIndex == selectedCategory.questions[currentQuestionIndex].correctReplyIndex)
         {
+            score.AddScore(correctReply);
             Debug.Log("Correct Reply!");
         }
         else
         {
+            score.SubtractScore(wrongReply);
             Debug.Log("Wrong Reply!");
         }
 
         // Proceed to the next question or end the quiz if all questions are replied
         currentQuestionIndex++;
+        Debug.Log($"Current Question Index: {currentQuestionIndex}/{selectedCategory.questions.Length}");
         if (currentQuestionIndex < selectedCategory.questions.Length)
         { 
             DisplayQuestion(); // Display the next question

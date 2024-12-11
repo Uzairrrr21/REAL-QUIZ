@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
         int selectedCategoryIndex = PlayerPrefs.GetInt("SelectedCategory", 0);
         GameFinished.SetActive(false);
         SelectCategory(selectedCategoryIndex);
+        LoadProgress(selectedCategoryIndex);
     }
     // Method to select a category based on the player's choice
     // categoryIndex: the index of the category selected by the player
@@ -102,9 +103,11 @@ public class GameManager : MonoBehaviour
             score.SubtractScore(wrongReply);
             Debug.Log("Wrong Reply!");
         }
-
+        
         // Proceed to the next question or end the quiz if all questions are replied
         currentQuestionIndex++;
+        SaveProgress();
+        
         Debug.Log($"Current Question Index: {currentQuestionIndex}/{selectedCategory.questions.Length}");
         if (currentQuestionIndex < selectedCategory.questions.Length)
         { 
@@ -150,4 +153,22 @@ public class GameManager : MonoBehaviour
         GameFinished.SetActive(true);
         scoreText.text = "" + correctReplies + " / " + selectedCategory.questions.Length;
     }
+
+    private void SaveProgress()
+    {
+        PlayerPrefs.SetInt("LastQuestionIndex_" + selectedCategory.name, currentQuestionIndex);
+        PlayerPrefs.Save();
+    }
+
+    // Load the saved progress for the selected category
+    private void LoadProgress(int categoryIndex)
+    {
+        string categoryName = categories [categoryIndex].name;
+        currentQuestionIndex = PlayerPrefs.GetInt("LastQuestionIndex_" + categoryName, 0);
+    
+        // Start the quiz from the Loaded progress
+        DisplayQuestion();
+    }
+
 }
+

@@ -22,9 +22,19 @@ public class GameManager : MonoBehaviour
     public ScoreManager score;
     public int correctReply = 10;
     public int wrongReply = 5;
+    public TextMeshPro scoreText;
+
+    [Header("correctReplyIndex")]
+    public int correctReplyIndex;
+    int correctReplies;
+
+    [Header("Game Finished Panel")]
+    public GameObject GameFinished;
     void Start ()
     {
-        SelectCategory(0);
+        int selectedCategoryIndex = PlayerPrefs.GetInt("SelectedCategory", 0);
+        GameFinished.SetActive(false);
+        SelectCategory(selectedCategoryIndex);
     }
     // Method to select a category based on the player's choice
     // categoryIndex: the index of the category selected by the player
@@ -45,6 +55,8 @@ public class GameManager : MonoBehaviour
     {
         // Check if a category has been selected 
         if (selectedCategory == null) return;
+
+        ResetButtons();
 
         // Get the current question from the selected category 
         var question = selectedCategory.questions[currentQuestionIndex];
@@ -82,6 +94,7 @@ public class GameManager : MonoBehaviour
         if (replyIndex == selectedCategory.questions[currentQuestionIndex].correctReplyIndex)
         {
             score.AddScore(correctReply);
+            correctReplies++;
             Debug.Log("Correct Reply!");
         }
         else
@@ -99,8 +112,42 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            ShowGameFinishedPanel();
             Debug.Log("Quiz Finished!");
             // Implement what happens when the quiz is finished (e.g., show results, restart, etc.)
         }
+    }
+
+    //Call this method when you want to show the correct reply
+    public void ShowCorrectReply()
+    {
+        correctReplyIndex = selectedCategory.questions[currentQuestionIndex].correctReplyIndex;
+
+        // Loop through all buttons
+        for (int i = 0; i < replyButtons.Length; i++)
+        {
+            if (i == correctReplyIndex)
+            {
+                replyButtons[i].interactable = true; // Show the correct button
+            }
+            else
+            {
+                replyButtons[i].interactable = false; // Hide the incorrect buttons
+            }
+        }       
+    }
+
+    public void ResetButtons()
+    {
+        foreach (var button in replyButtons)
+        {
+            button.interactable = true;
+        }
+    }
+
+    public void ShowGameFinishedPanel()
+    {
+        GameFinished.SetActive(true);
+        scoreText.text = "" + correctReplies + " / " + selectedCategory.questions.Length;
     }
 }
